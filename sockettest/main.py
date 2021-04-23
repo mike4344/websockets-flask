@@ -12,9 +12,9 @@ def index():
 #for handling messages as strings
 @socketio.on('message')
 def handle_message(data):
-    print('recieved message ' + data)
+    print('recieved message here ' + data)
     #send is used in unnamed events
-    send(message)
+    send(data)
 
 
 #for handling messages as JSON

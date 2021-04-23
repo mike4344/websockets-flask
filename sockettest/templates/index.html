@@ -12,17 +12,20 @@
         var socket = io.connect('http://127.0.0.1:5000');
 
         socket.on('connect', function() {
+            console.log('Connected')
             socket.send('User has connected!');
         });
 
-        socket.on('message', function(msg) {
-            $("#messages").append('<li>'+msg+'</li>');
-            console.log('Received message');
-        });
 
         $('#sendbutton').on('click', function() {
+            console.log('Send button clicked')
             socket.send($('#myMessage').val());
             $('#myMessage').val('');
+        });
+        socket.on('message', function(msg) {
+            console.log(msg)
+            $("#messages").append('<li>'+msg+'</li>');
+            console.log('Received message');
         });
 
     });
