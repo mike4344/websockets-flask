@@ -24,7 +24,7 @@ def handle_json_message(json):
     #send is used in unnamed events and if using Json need to specify json -true
     send(json, json=True)
 
-# for flexibility you can use custom events to take string,bytes, int or json
+# for flexibility you can use custom events to take string, bytes, int or json
 
 @socketio.on('my event')
 def handle_my_custom_event(json):
@@ -41,7 +41,7 @@ def handle_my_custom_event_multiple_args(arg1, arg2, arg3):
 
 #names that are reserved for events and cannot be used for custom events message, json, connect and disconnect
 
-#can set up namespaces which allow the ckint to have multipe connections the same physical socket independently
+#can set up namespaces which allow the client to have multipe connections the same physical socket independently
 #when a namespace is not specified it defaults to '/'
 @socketio.on('namespace event', namespace='/test')
 def handle_my_custom_namespace_event(json):
