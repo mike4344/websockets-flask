@@ -14,7 +14,7 @@ def index():
 def handle_message(data):
     print('recieved message here ' + data)
     #send is used in unnamed events
-    send(data)
+    send(data, broadcast=True)
 
 
 #for handling messages as JSON
