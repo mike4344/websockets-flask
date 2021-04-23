@@ -1,7 +1,6 @@
 from flask import Flask, render_template
 from flask_socketio import SocketIO, emit, send, join_room, leave_room, ConnectionRefusedError, Namespace
-# import eventlet
-# eventlet.monkey_patch()
+
 
 app = Flask(__name__)
 app.config['SECRET_KEY'] = 'secret!'
