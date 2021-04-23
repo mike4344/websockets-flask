@@ -14,3 +14,9 @@ you can open two windows and have both connect to localhost 5000 and send messag
 
 
 a special thank you to Nic Gauer for his help troubleshooting this
+
+
+
+docs:
+
+https://flask-socketio.readthedocs.io/en/latest/
