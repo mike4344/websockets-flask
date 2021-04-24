@@ -8,30 +8,79 @@
     <body>
     <script type="text/javascript">
     $(document).ready(function() {
-
+        //creates a new socket connected to local host 5000
         var socket = io.connect('http://127.0.0.1:5000');
+        //creates a new socket connected to local host 5000 with the namespace of chat
+        var namespaceSocket = io.connect('http://127.0.0.1:5000/chat')
 
+        //this listens for a connection event from the socket and will perform the callback function  when it happens
+        //the first one listens for the 'socket' connection
         socket.on('connect', function() {
             console.log('Connected')
             socket.send('User has connected!');
         });
+        //this one listens for the 'namespaceSocket' connection
+        namespaceSocket.on('connect', function() {
+            console.log('Connected chat')
+            namespaceSocket.send('chatsocket connected')
+        });
 
-
+        //this one will send the message to the local host 5000 soket
         $('#sendbutton').on('click', function() {
             console.log('Send button clicked')
             socket.send($('#myMessage').val());
             $('#myMessage').val('');
         });
+        //this one will send the message to the chat namespace socket
+        $('#sendbutton2').on('click', function() {
+            console.log('Send chat button clicked2')
+            namespaceSocket.send($('#myMessage2').val())
+            $('#myMessage2').val('');
+        });
+        //this one will send the message to the room
+        $('#sendbutton3').on('click', function() {
+            console.log('Send room button clicked')
+            socket.emit('room_message', {message: $('#myMessage').val(), room:'room3', username:'user'})
+            $('#myMessage').val('');
+        });
+        //this will listen for the event 'message' on 'socket' and add it to the list
         socket.on('message', function(msg) {
             console.log(msg)
             $("#messages").append('<li>'+msg+'</li>');
             console.log('Received message');
         });
+        //this one will listen for the event 'message' on 'namespaceSocket' and add it to the list
+        namespaceSocket.on('message', function(msg) {
+            console.log(msg)
+            $("#messages2").append('<li>'+msg+'</li>');
+            console.log('Received message');
+        });
+        //this one will listen for the event 'room_message' on 'socket' and add it to the list
+        socket.on('room_message', function(msg) {
+            console.log(msg.message, 'room')
+            $("#room3").append('<li>'+msg.message+'</li>');
+            console.log('Received message');
+        })
+        //this one will send the event 'join_room' to the socket
+        $('#join').on('click', function() {
+            socket.emit('join_room', {'username':'user', 'room':'room3', 'message':'hello'})
 
+        })
+        //this on will send the event 'leave' to the socket
+        $('#leave').on('click', function() {
+            socket.emit('leave', {'username':'user', 'room':'room3', 'message':'hello'})
+        })
     });
-    </script>
-    <ul id="messages"></ul>
-    <input type="text" id="myMessage">
-    <button id="sendbutton">Send</button>
-    </body>
+        </script>
+        <ul id="messages"></ul>
+        <input type="text" id="myMessage">
+        <button id="sendbutton3">Send room</button>
+        <button id="join">Join</button>
+        <button id="leave">leave</button>
+        <button id="sendbutton">Send</button>
+        <ul id="messages2"></ul>
+        <input type="text" id="myMessage2">
+        <button id="sendbutton2">Send</button>
+        <ul id='room3'></ul>
+        </body>
     </html>

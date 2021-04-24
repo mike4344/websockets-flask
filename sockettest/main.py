@@ -82,8 +82,9 @@ def from_server():
 
 # the room functions can be used in a chat app with multiple chat rooms
 #the optional 'to' argument can be used tosend the message to all clients connected to a given room
-@socketio.on('join')
+@socketio.on('join_room')
 def on_join(data):
+    print('join')
     username = data['username']
     room = data['room']
     join_room(room)
@@ -100,7 +101,15 @@ def on_leave(data):
 # a given client can join any room which can have any name, when a client disconnects they leave all the rooms they were in
 # the context-free send and emit can also use the 'to' argument to send the message to all clients connected to a room
 # since all clients are assigned a personall room, to address a message to a single client the session ID of the client can be used as the 'to' argument
+@socketio.on('connect', namespace='/chat')
+def on_chat_connect():
+    print('chat connected!!!')
 
+@socketio.on('message', namespace='/chat')
+def handle_chat_message(data):
+    print('recieved message chat ' + data)
+    #send is used in unnamed events
+    send(data, broadcast=True)
 
 #socket io dispatches connection events as well as disconnect events
 #connection and disconnection events are sent individually to each namespace used
@@ -140,6 +149,11 @@ def error_handler_chat(e):
 @socketio.on_error_default
 def default_error_handler(e):
     pass
+
+@socketio.on('room_message')
+def room_message_handler(data):
+    print('room message')
+    emit('room_message', data, room=data['room'])
 
 if __name__ == '__main__':
     socketio.run(app)
