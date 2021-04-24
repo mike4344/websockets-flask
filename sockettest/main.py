@@ -149,7 +149,7 @@ def error_handler_chat(e):
 @socketio.on_error_default
 def default_error_handler(e):
     pass
-
+# this is to handle the specific room messages
 @socketio.on('room_message')
 def room_message_handler(data):
     print('room message')
